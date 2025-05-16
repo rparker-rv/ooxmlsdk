@@ -27,7 +27,7 @@ syn = "2.0.101"
 prettyplease = "0.2.32"
 proc-macro2 = "1.0.95"
 heck = "0.5.0"
-zip = { version = "2.6.1", default-features = false, features = ["deflate"] }
+zip = { version = "3.0.0", default-features = false, features = ["deflate"] }
 thiserror = "2.0.12"
 criterion = "0.5.1"
 pprof = { version = "0.14", features = ["criterion", "flamegraph"] }
