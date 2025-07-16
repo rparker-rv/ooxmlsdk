@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.3.0
+
+### New Features
+
+### Bug Fixes
+
+### Misc Changes
+
+- Bump the `quick-xml` version to `v0.38.0`
+- Use `decode_and_unescape_value` instead of `unescape_value`, fix `quick-xml` `encoding` feature issue, see https://github.com/tafia/quick-xml/pull/864
+
 ## 0.2.3
 
 ### New Features

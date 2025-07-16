@@ -48,16 +48,26 @@ impl Relationships {
       let attr = attr?;
       match attr.key.as_ref() {
         b"xmlns" => {
-          xmlns = Some(attr.unescape_value()?.to_string());
+          xmlns = Some(
+            attr
+              .decode_and_unescape_value(xml_reader.decoder())?
+              .to_string(),
+          );
         }
         b"mc:Ignorable" => {
-          mc_ignorable = Some(attr.unescape_value()?.to_string());
+          mc_ignorable = Some(
+            attr
+              .decode_and_unescape_value(xml_reader.decoder())?
+              .to_string(),
+          );
         }
         key => {
           if key.starts_with(b"xmlns:") {
             xmlns_map.insert(
               String::from_utf8_lossy(&key[6..]).to_string(),
-              attr.unescape_value()?.to_string(),
+              attr
+                .decode_and_unescape_value(xml_reader.decoder())?
+                .to_string(),
             );
           }
         }
@@ -228,16 +238,30 @@ impl Relationship {
 
       match attr.key.as_ref() {
         b"TargetMode" => {
-          target_mode = Some(TargetMode::from_str(&attr.unescape_value()?)?);
+          target_mode = Some(TargetMode::from_str(
+            &attr.decode_and_unescape_value(xml_reader.decoder())?,
+          )?);
         }
         b"Target" => {
-          target = Some(attr.unescape_value()?.to_string());
+          target = Some(
+            attr
+              .decode_and_unescape_value(xml_reader.decoder())?
+              .to_string(),
+          );
         }
         b"Type" => {
-          r#type = Some(attr.unescape_value()?.to_string());
+          r#type = Some(
+            attr
+              .decode_and_unescape_value(xml_reader.decoder())?
+              .to_string(),
+          );
         }
         b"Id" => {
-          id = Some(attr.unescape_value()?.to_string());
+          id = Some(
+            attr
+              .decode_and_unescape_value(xml_reader.decoder())?
+              .to_string(),
+          );
         }
         _ => {}
       }

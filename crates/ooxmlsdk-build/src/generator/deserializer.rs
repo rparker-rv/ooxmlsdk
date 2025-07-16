@@ -477,16 +477,16 @@ pub fn gen_deserializers(schema: &OpenXmlSchema, gen_context: &GenContext) -> To
             match attr.key.as_ref() {
               #( #attr_match_list )*
               b"xmlns" => {
-                xmlns = Some(attr.unescape_value()?.into_owned());
+                xmlns = Some(attr.decode_and_unescape_value(xml_reader.decoder())?.into_owned());
               }
               b"mc:Ignorable" => {
-                mc_ignorable = Some(attr.unescape_value()?.into_owned());
+                mc_ignorable = Some(attr.decode_and_unescape_value(xml_reader.decoder())?.into_owned());
               }
               key => {
                 if key.starts_with(b"xmlns:") {
                   xmlns_map.insert(
                     String::from_utf8_lossy(&key[6..]).to_string(),
-                    attr.unescape_value()?.into_owned(),
+                    attr.decode_and_unescape_value(xml_reader.decoder())?.into_owned(),
                   );
                 }
               }
@@ -836,7 +836,7 @@ fn gen_field_match_arm(attr: &OpenXmlSchemaTypeAttribute, gen_context: &GenConte
   parse2(if attr.r#type.starts_with("ListValue<") {
     quote! {
       #attr_name_literal => {
-        #attr_name_ident = Some(attr.unescape_value()?.into_owned());
+        #attr_name_ident = Some(attr.decode_and_unescape_value(xml_reader.decoder())?.into_owned());
       }
     }
   } else if attr.r#type.starts_with("EnumValue<") {
@@ -883,7 +883,7 @@ fn gen_field_match_arm(attr: &OpenXmlSchemaTypeAttribute, gen_context: &GenConte
       "Base64BinaryValue" | "DateTimeValue" | "DecimalValue" | "HexBinaryValue"
       | "IntegerValue" | "SByteValue" | "StringValue" => quote! {
         #attr_name_literal => {
-          #attr_name_ident = Some(attr.unescape_value()?.into_owned());
+          #attr_name_ident = Some(attr.decode_and_unescape_value(xml_reader.decoder())?.into_owned());
         }
       },
       "BooleanValue" | "OnOffValue" | "TrueFalseBlankValue" | "TrueFalseValue" => quote! {
@@ -900,7 +900,7 @@ fn gen_field_match_arm(attr: &OpenXmlSchemaTypeAttribute, gen_context: &GenConte
           #attr_name_literal => {
             #attr_name_ident = Some(
               attr
-                .unescape_value()?
+                .decode_and_unescape_value(xml_reader.decoder())?
                 .parse::<#e_type>()?,
             );
           }
