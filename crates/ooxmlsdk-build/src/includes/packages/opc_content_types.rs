@@ -51,16 +51,26 @@ impl Types {
 
       match attr.key.as_ref() {
         b"xmlns" => {
-          xmlns = Some(attr.unescape_value()?.into_owned());
+          xmlns = Some(
+            attr
+              .decode_and_unescape_value(xml_reader.decoder())?
+              .into_owned(),
+          );
         }
         b"mc:Ignorable" => {
-          mc_ignorable = Some(attr.unescape_value()?.into_owned());
+          mc_ignorable = Some(
+            attr
+              .decode_and_unescape_value(xml_reader.decoder())?
+              .into_owned(),
+          );
         }
         key => {
           if key.starts_with(b"xmlns:") {
             xmlns_map.insert(
               String::from_utf8_lossy(&key[6..]).to_string(),
-              attr.unescape_value()?.into_owned(),
+              attr
+                .decode_and_unescape_value(xml_reader.decoder())?
+                .into_owned(),
             );
           }
         }
@@ -234,10 +244,18 @@ impl Default {
 
       match attr.key.as_ref() {
         b"Extension" => {
-          extension = Some(attr.unescape_value()?.into_owned());
+          extension = Some(
+            attr
+              .decode_and_unescape_value(xml_reader.decoder())?
+              .into_owned(),
+          );
         }
         b"ContentType" => {
-          content_type = Some(attr.unescape_value()?.into_owned());
+          content_type = Some(
+            attr
+              .decode_and_unescape_value(xml_reader.decoder())?
+              .into_owned(),
+          );
         }
         _ => {}
       }
@@ -336,10 +354,18 @@ impl Override {
 
       match attr.key.as_ref() {
         b"ContentType" => {
-          content_type = Some(attr.unescape_value()?.into_owned());
+          content_type = Some(
+            attr
+              .decode_and_unescape_value(xml_reader.decoder())?
+              .into_owned(),
+          );
         }
         b"PartName" => {
-          part_name = Some(attr.unescape_value()?.into_owned());
+          part_name = Some(
+            attr
+              .decode_and_unescape_value(xml_reader.decoder())?
+              .into_owned(),
+          );
         }
         _ => {}
       }
